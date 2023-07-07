@@ -1,40 +1,85 @@
 import express from 'express'
 const app = express()
 
-// interface User {
-//   name: string
-//   age: number
-// }
+interface User {
+  name: string
+  age: number
+}
 
-// const db: User[] = []
-
-// query, body
+const db: User[] = []
 
 // http://localhost:3005/static/banana.gif
+
 app.use('/static', express.static('static'))
 
 app.get('/', (req, res) => {
-  const name = req.query.name
-  let stringName = '이름 없음'
-
-  if (typeof name === 'string') stringName = name
-  if (Array.isArray(name)) {
-    stringName = name.join(', ')
-  }
-
-  return res.send('this is get. you are ' + req.query.name)
+  return res.json(db)
 })
 
 app.post('/', (req, res) => {
-  return res.send('this is post')
+  const name = req.query.name
+  const age = req.query.age
+
+  if (typeof name !== 'string') {
+    return res.send('Error:"name"은 string이 아닙니다.')
+  }
+  if (typeof age !== 'string') {
+    return res.send('Error:"age"은 유효한 값이 아닙니다.')
+  }
+
+  const numberAge = parseInt(age)
+
+  if (Number.isNaN(numberAge)) {
+    return res.send('Error:"age"은 유효한 값이 아닙니다.')
+  }
+
+  db.push({
+    name,
+    age: numberAge
+  })
+
+  return res.json(db)
 })
 
-app.put('/', (req, res) => {
-  return res.send('this is put')
+app.put('/:targetName', (req, res) => {
+  const targetName = req.params.targetName
+  const name = req.query.name
+  const age = req.query.age
+
+  if (typeof name !== 'string') {
+    return res.send('Error:"name"은 string이 아닙니다.')
+  }
+  if (typeof age !== 'string') {
+    return res.send('Error:"age"은 유효한 값이 아닙니다.')
+  }
+
+  const numberAge = parseInt(age)
+  if (Number.isNaN(numberAge)) {
+    return res.send('Error:"age"은 유효한 값이 아닙니다.')
+  }
+
+  const index = db.findIndex(user => user.name === targetName)
+  if (db[index] === undefined) {
+    return res.send('Error:존재하지 않는 이름입니다.')
+  }
+
+  db[index].name = name
+  db[index].age = numberAge
+
+  return res.json(db)
 })
 
-app.delete('/', (req, res) => {
-  return res.send('this is delete')
+app.delete('/:targetName', (req, res) => {
+  const targetName = req.params.targetName
+
+  const index = db.findIndex(user => user.name === targetName)
+  if (db[index] === undefined) {
+    return res.send('Error:존재하지 않는 이름입니다.')
+  }
+
+  db.splice(index, 1)
+
+  return res.json(db)
 })
 
 const port = 3000
