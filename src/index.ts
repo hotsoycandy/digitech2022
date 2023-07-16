@@ -1,5 +1,11 @@
 import express from 'express'
+import multer from 'multer'
+import fs from 'fs'
+
+// HitXxnO2dR1fouTW
+
 const app = express()
+const upload = multer({ dest: 'static/' })
 
 interface User {
   name: string
@@ -8,8 +14,9 @@ interface User {
 
 const db: User[] = []
 
-// http://localhost:3005/static/banana.gif
-
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(upload.fields([{ name: 'ooo' }]))
 app.use('/static', express.static('static'))
 
 app.get('/', (req, res) => {
@@ -17,8 +24,20 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-  const name = req.query.name
-  const age = req.query.age
+  const name = req.body.name
+  const age = req.body.age
+
+  if (req.files === undefined) {
+    return res.send('Error:"files"가 유효하지 않습니다.')
+  }
+
+  if (!Array.isArray(req.files)) {
+    const { filename, originalname } = req.files.ooo[0]
+    fs.renameSync(
+      `./static/${filename}`,
+      `./static/${originalname}`
+    )
+  }
 
   if (typeof name !== 'string') {
     return res.send('Error:"name"은 string이 아닙니다.')
@@ -39,6 +58,10 @@ app.post('/', (req, res) => {
   })
 
   return res.json(db)
+})
+
+app.post('/image-upload', (req, res) => {
+  return res.send('image uploaded')
 })
 
 app.put('/:targetName', (req, res) => {
