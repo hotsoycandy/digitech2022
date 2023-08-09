@@ -25,9 +25,14 @@ const userSchema = new Schema<User>({
   email: { type: String, required: true },
   friendsNumber: { type: Number, required: true },
   inflowPath: { type: String },
-  houseAddress: { type: String },
-  createAt: { type: Date, required: true, default: () => Date.now() },
-  updateAt: { type: Date, required: true, default: () => Date.now() }
+  houseAddress: { type: String }
+}, {
+  versionKey: false,
+  // timestamps: true
+  timestamps: {
+    createdAt: 'createAt',
+    updatedAt: 'updateAt'
+  }
 })
 
 export default model('User', userSchema)
