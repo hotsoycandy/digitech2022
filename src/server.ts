@@ -1,6 +1,8 @@
 import express from 'express'
 import multer from 'multer'
 import session from 'express-session'
+
+// APIs
 import * as signupAPI from './routes/signup'
 import * as getUserMeAPI from './routes/getUserMe'
 import * as loginAPI from './routes/login'
@@ -11,6 +13,10 @@ import * as getPostHTMLAPI from './routes/post/getPostHTML'
 import * as updatePostAPI from './routes/post/updatePost'
 import * as deletePostAPI from './routes/post/deletePost'
 
+// pages
+import * as mainPage from './routes/views/main'
+import * as viewPage from './routes/views/view'
+
 interface Route {
   path: string
   method: 'post' | 'get' | 'put' | 'delete'
@@ -18,6 +24,7 @@ interface Route {
 }
 
 const routes: Route[] = [
+  // APIs
   signupAPI,
   getUserMeAPI,
   loginAPI,
@@ -26,7 +33,11 @@ const routes: Route[] = [
   getPostAPI,
   getPostHTMLAPI,
   updatePostAPI,
-  deletePostAPI
+  deletePostAPI,
+
+  // pages
+  mainPage,
+  viewPage
 ]
 
 declare module 'express-session' { // express-session 모듈 안에 있는 type을 수정하겠다.
@@ -51,7 +62,11 @@ export async function startServer (): Promise<void> {
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use(upload.fields([{ name: 'ooo' }]))
-  app.use('/static', express.static('static'))
+  app.use('/static', express.static('./src/static'))
+
+  // set view engine
+  app.set('view engine', 'ejs')
+  app.set('views', './src/views')
 
   // api handlers
   routes.forEach(({ path, method, handler }) => {

@@ -1,0 +1,29 @@
+<%- include('header') %>
+
+<h2 class="view-title"><%= post.title %></h2>
+
+<div style="height: 10px"></div>
+
+<hr/>
+
+<div class="view-content">
+  <p><%= post.content %></p>
+</div>
+
+<hr/>
+
+<div style="height: 10px"></div>
+
+<p class="view-count">조회수: <%= post.viewCount %></p>
+<p>작성일: <%= post.createAt.toLocaleString() %></p>
+<p>수정일: <%= post.updateAt.toLocaleString() %></p>
+
+<div style="height: 10px"></div>
+
+<div>
+  <a href="/?page=<%= originPage %>"><button class="default-button">돌아가기</button></a>
+  <a href="#"><button class="default-button">수정</button></a>
+  <a href="#"><button class="default-button">삭제</button></a>
+</div>
+
+<%- include('footer') %>
