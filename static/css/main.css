@@ -1,0 +1,75 @@
+/* Normalize */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+li { list-style: none; }
+button { cursor: pointer; }
+
+/* utils */
+.float::after { display: table; content: ''; clear: both; }
+.middle { display: table; margin: 0 auto; }
+.pointer { cursor: pointer; }
+.center { position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%); }
+.default-button {
+  padding: 8px 12px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border: none;
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+/* class style */
+.wrap {
+  margin: 30px auto;
+  padding: 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  min-width: 500px;
+  border-radius: 5px;
+}
+
+.no-post {
+  width: 100%;
+  text-align: center;
+}
+
+.post-list {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  white-space: nowrap;
+}
+.post-list th {
+  text-align: left;
+  padding-right: 20px;
+}
+.post-list td {
+  padding-right: 20px;
+  overflow: hidden;
+  max-width: 150px;
+  text-overflow: ellipsis;
+}
+.post-list th:last-child {
+  padding-right: 0;
+}
+.post-list td:last-child {
+  padding-right: 0;
+}
+
+.pagination-wrap > li{
+  float: left;
+  margin: 20px 10px 0;
+}
+
+.view-content {
+  margin: 10px 0;
+}
+
+.edit-title {
+  width: 100%;
+  padding: 5px;
+  font-size: 22px;
+}
+
+.edit-content {
+  width: 100%;
+  min-height: 200px;
+  padding: 5px;
+}
