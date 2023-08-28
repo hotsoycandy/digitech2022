@@ -1,0 +1,34 @@
+<%- include('header') %>
+
+<div class="float" style="vertical-align: bottom;">
+  <h2 class="view-title">글 수정</h2>
+</div>
+
+<div style="height: 10px"></div>
+
+<form action="?_method=PUT" method="post">
+  <input
+    type="text"
+    class="edit-title"
+    value="<%- post.title %>"
+    name="title"
+  >
+
+  <div style="height: 10px"></div>
+
+  <textarea
+    class="edit-content"
+    name="content"
+  ><%- post.content %></textarea>
+
+  <div style="height: 10px"></div>
+
+  <div>
+    <button class="default-button" type="submit">완료</button>
+    <a href="/posts/<%= post._id %>/view">
+      <button class="default-button" type="button">취소</button>
+    </a>
+  </div>
+</form>
+
+<%- include('footer') %>

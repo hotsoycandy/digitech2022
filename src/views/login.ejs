@@ -1,0 +1,25 @@
+<%- include('header') %>
+
+<form action="/login-controller" method="post">
+  <div>
+    <input
+      type="text"
+      class="login-input"
+      name="id"
+      placeholder="아이디"
+    >
+  </div>
+  <div style="height: 10px"></div>
+  <div>
+    <input
+      type="password"
+      name="password"
+      class="login-input"
+      placeholder="비밀번호"
+    >
+  </div>
+  <div style="height: 10px"></div>
+  <button class="default-button">로그인</button>
+</form>
+
+<%- include('footer') %>

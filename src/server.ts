@@ -1,4 +1,5 @@
 import express from 'express'
+import methodOverride from 'method-override'
 import multer from 'multer'
 import session from 'express-session'
 
@@ -16,6 +17,14 @@ import * as deletePostAPI from './routes/post/deletePost'
 // pages
 import * as mainPage from './routes/views/main'
 import * as viewPage from './routes/views/view'
+import * as editPage from './routes/views/edit'
+import * as loginPage from './routes/views/login'
+import * as logoutPage from './routes/views/logout'
+
+import * as loginController from './routes/views/loginController'
+
+// models
+import User from './Models/User'
 
 interface Route {
   path: string
@@ -37,7 +46,13 @@ const routes: Route[] = [
 
   // pages
   mainPage,
-  viewPage
+  viewPage,
+  editPage,
+  loginPage,
+  logoutPage,
+
+  // controller
+  loginController
 ]
 
 declare module 'express-session' { // express-session 모듈 안에 있는 type을 수정하겠다.
@@ -46,10 +61,17 @@ declare module 'express-session' { // express-session 모듈 안에 있는 type�
   }
 }
 
+declare module 'express-serve-static-core' { // expres 모듈 안에 있는 type을 수정하겠다.
+  interface Request { // express 안에 있는 Express 값을 만지겠다.
+    renderData?: Record<string, any>
+  }
+}
+
 export async function startServer (): Promise<void> {
   const app = express()
   const upload = multer({ dest: 'static/' })
 
+  app.use(methodOverride('_method'))
   app.set('trust proxy', 1) // trust first proxy
   app.use(session({
     secret: 'cat keyboard',
@@ -67,6 +89,20 @@ export async function startServer (): Promise<void> {
   // set view engine
   app.set('view engine', 'ejs')
   app.set('views', './src/views')
+
+  app.use((req, res, next) => {
+    if (req.session._id === undefined) return next()
+
+    User.findOne({ _id: req.session._id })
+      .then(user => {
+        req.renderData ??= {}
+        req.renderData.user = user
+        next()
+      })
+      .catch(err => {
+        next(err)
+      })
+  })
 
   // api handlers
   routes.forEach(({ path, method, handler }) => {

@@ -26,7 +26,7 @@ const handler = async (req: Request, res: Response): Promise<void> => {
   const totalPageCount = await Post.countDocuments()
   const lastPage = Math.ceil(totalPageCount / limit)
 
-  return res.render('main', { postList, page, lastPage })
+  return res.render('main', Object.assign({ postList, page, lastPage }, req.renderData))
 }
 
 export { path, method, handler }

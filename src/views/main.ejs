@@ -1,4 +1,4 @@
-<%- include('header')  %>
+<%- include('header') %>
 
 <h2>📝 게시글 목록</h2>
 
@@ -21,7 +21,7 @@
     <% postList.forEach(post => { %>
       <tr>
         <td><%= post.title %></td>
-        <td><a href="/views/<%= post._id %>?origin_page=<%= page %>"><%= post.content %></a></td>
+        <td><a href="/posts/<%= post._id %>/view?origin_page=<%= page %>"><%= post.content %></a></td>
         <td><%= post.viewCount %></td>
         <td><%= post.createAt.toLocaleDateString() %></td>
       </tr>
@@ -34,4 +34,4 @@
   </ul>
 <% } %>
 
-<%- include('footer')  %>
+<%- include('footer') %>
