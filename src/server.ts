@@ -22,6 +22,8 @@ import * as loginPage from './routes/views/login'
 import * as logoutPage from './routes/views/logout'
 
 import * as loginController from './routes/views/loginController'
+import * as deletePostController from './routes/views/deletePostController'
+import * as updatePostController from './routes/views/updatePostController'
 
 // models
 import User from './Models/User'
@@ -52,18 +54,14 @@ const routes: Route[] = [
   logoutPage,
 
   // controller
-  loginController
+  loginController,
+  deletePostController,
+  updatePostController
 ]
 
 declare module 'express-session' { // express-session 모듈 안에 있는 type을 수정하겠다.
   interface SessionData { // express-session 안에 있는 SessionData 값을 만지겠다.
     _id: string
-  }
-}
-
-declare module 'express-serve-static-core' { // expres 모듈 안에 있는 type을 수정하겠다.
-  interface Request { // express 안에 있는 Express 값을 만지겠다.
-    renderData?: Record<string, any>
   }
 }
 
@@ -91,12 +89,16 @@ export async function startServer (): Promise<void> {
   app.set('views', './src/views')
 
   app.use((req, res, next) => {
-    if (req.session._id === undefined) return next()
+    ;(async () => {
+      const user = await User.findOne({ _id: req.session._id })
 
-    User.findOne({ _id: req.session._id })
-      .then(user => {
-        req.renderData ??= {}
-        req.renderData.user = user
+      const originalRender = res.render.bind(res)
+
+      res.render = (fileName: string, renderData?: Record<string, any>) => {
+        return originalRender(fileName, { user, ...renderData })
+      }
+    })()
+      .then(() => {
         next()
       })
       .catch(err => {

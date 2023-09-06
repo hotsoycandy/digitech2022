@@ -22,8 +22,17 @@
 
 <div>
   <a href="/?page=<%= originPage %>"><button class="default-button">돌아가기</button></a>
-  <a href="/posts/<%= post._id %>/edit"><button class="default-button">수정</button></a>
-  <a href="#"><button class="default-button">삭제</button></a>
+  <% if (post.authorId === user?._id.toString()) { %>
+    <a href="/posts/<%= post._id %>/edit"><button class="default-button">수정</button></a>
+
+    <form
+      action="/posts-controller/<%= post._id %>?_method=delete"
+      method="post"
+      style="display: inline-block;">
+      <button class="default-button">삭제</button>
+    </form>
+
+  <% } %>
 </div>
 
 <%- include('footer') %>

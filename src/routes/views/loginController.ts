@@ -1,4 +1,4 @@
-/** @file 로그인 API */
+/** @file 로그인 controller */
 
 import { Request, Response } from 'express'
 import User from '../../Models/User'
